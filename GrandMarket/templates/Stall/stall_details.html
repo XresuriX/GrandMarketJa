@@ -9,30 +9,34 @@
 {% trans "stalls" %} | {{ block.super }}
 {% endblock %}
 
-{% block breadcrumbs %}
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{{ homepage_url }}">{% trans "Home" %}</a>
-            </li>
-            <li class="breadcrumb-item" aria-current="page">
-              <a href="{% url 'Stalls:index' %}">{% trans "stalls" %}</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">{{ stall.name }}</li>
-        </ol>
-    </nav>
-{% endblock %}
-
 {% block headertext %}
     {% trans "stall" %}
 {% endblock %}
 
 {% block content %}
 
-
 <header>
 
+
 	<div class="container">
+{% block dashboard_nav %}
+		  {% include "oscar/partials/nav_primary.html" %}
+	{% endblock %}
+
+	{% block breadcrumbs %}
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item">
+					<a href="{% customer:home %}}">{% trans "Home" %}</a>
+				</li>
+				<li class="breadcrumb-item" aria-current="page">
+				  <a href="{% url 'Stalls:index' %}">{% trans "stalls" %}</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">{{ stall.name }}</li>
+			</ol>
+		</nav>
+	{% endblock %}
+
 
 		<div class="profile">
 
