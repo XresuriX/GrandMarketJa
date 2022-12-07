@@ -1,0 +1,340 @@
+{% extends "oscar/base.html" %}
+{% load static %}
+{% load currency_filters %}
+{% load category_tags %}
+{% load i18n %}
+{% load product_tags %}
+<base href="{% static '/' %}">
+{% block title %}
+{% trans "stalls" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ homepage_url }}">{% trans "Home" %}</a>
+            </li>
+            <li class="breadcrumb-item" aria-current="page">
+              <a href="{% url 'Stalls:index' %}">{% trans "stalls" %}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ stall.name }}</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block headertext %}
+    {% trans "stall" %}
+{% endblock %}
+
+{% block content %}
+
+
+<header>
+
+	<div class="container">
+
+		<div class="profile">
+
+			<div class="profile-image">
+
+				<img src="{% static 'oscar/images/download.png' %}" alt="">
+
+			</div>
+
+			<div class="profile-user-settings">
+
+				<h1 class="profile-user-name">{{ stall.name }}</h1>
+
+				{% if request.user == stall.owner %}
+				<button class="btn profile-edit-btn"><a href="{% url 'Stalls:stall-update' stall.id %}">lorem</a> </button>
+				{% endif %}
+
+				<button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>
+
+			</div>
+
+			<div class="profile-stats">
+
+				<ul>
+					<li><span class="profile-stat-count">164</span> posts</li>
+					<li><span class="profile-stat-count">188</span> followers</li>
+					<li><span class="profile-stat-count">206</span> following</li>
+				</ul>
+
+			</div>
+
+			<div class="profile-bio">
+
+				<p><span class="profile-real-name">Jane Doe</span> Lorem ipsum dolor sit, amet consectetur adipisicing elit 📷✈️🏕️</p>
+
+			</div>
+
+		</div>
+		<!-- End of profile section -->
+
+	</div>
+	<!-- End of container -->
+
+</header>
+
+<main>
+
+	<div class="container">
+
+		<div class="gallery">
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 56</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1497445462247-4330a224fdb1?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 89</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 5</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-type">
+
+					<span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
+
+				</div>
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 42</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 1</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1502630859934-b3b41d18206c?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-type">
+
+					<span class="visually-hidden">Video</span><i class="fas fa-video" aria-hidden="true"></i>
+
+				</div>
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 38</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 0</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1498471731312-b6d2b8280c61?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-type">
+
+					<span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
+
+				</div>
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 47</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 1</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1515023115689-589c33041d3c?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 94</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 3</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-type">
+
+					<span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
+
+				</div>
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 52</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 4</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1515814472071-4d632dbc5d4a?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 66</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1511407397940-d57f68e81203?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-type">
+
+					<span class="visually-hidden">Gallery</span><i class="fas fa-clone" aria-hidden="true"></i>
+
+				</div>
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 45</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 0</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1518481612222-68bbe828ecd1?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 34</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 1</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1505058707965-09a4469a87e4?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 41</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 0</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+			<div class="gallery-item" tabindex="0">
+
+				<img src="https://images.unsplash.com/photo-1423012373122-fff0a5d28cc9?w=500&h=500&fit=crop" class="gallery-image" alt="">
+
+				<div class="gallery-item-type">
+
+					<span class="visually-hidden">Video</span><i class="fas fa-video" aria-hidden="true"></i>
+
+				</div>
+
+				<div class="gallery-item-info">
+
+					<ul>
+						<li class="gallery-item-likes"><span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i> 30</li>
+						<li class="gallery-item-comments"><span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i> 2</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+		</div>
+      <h2>{{ stall.name }}</h2> <br>
+      <!--The stall is in: {{ stall.city }} <br>-->
+      The stall's Owner is Mr/Mrs: <strong>{{ stall.owner }} </strong>
+    </p>
+    <div>
+        <div class="flex-row justify-content-center">
+            <div><img src="{% static 'oscar/img/download.png' %}"></div>
+            <!--stall info-->
+            <div class="info">
+                <div class="stall-name">{{ stall.name }}</div>
+                <div class="stall-owner">{{ stall.owner }}</div>
+
+                <!--stall stock info-->
+                <div>
+                    <div class="stall-stock">
+                    <h2>54</h2>
+                    <p>Stock total</p>
+                </div>
+
+                <!--stall categories info-->
+                <div class="stall-category">
+                    <h2>lorem</h2>
+                    <p>should have tags to help identify what they sell</p>
+                </div>
+
+                <!--stall user review info-->
+                <div class="stall-reviews">
+                    <h2>lorem</h2>
+                    <p>should show how high this stall is rated</p>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}

@@ -1,0 +1,15 @@
+{% extends "oscar/base.html" %}
+
+{% load i18n %}
+{% load product_tags %}
+
+{% block content %}
+
+        {% for stall in object_list %}
+        <p>
+          <h2><img src="{{ stalls_list.image }}"><a href="{% url 'Stalls:details' stall.pk %}">{{ stall.name }}</a></h2>
+          <!---The stall is in: {{ stall.city }}-->
+        </p> <hr/>
+        {% endfor %}
+    
+{% endblock content %}
