@@ -1,4 +1,4 @@
-{% extends "oscar/base.html" %}
+{% extends "oscar/layout.html" %}
 {% load static %}
 {% load currency_filters %}
 {% load category_tags %}
@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block headertext %}
-    {% trans "stall" %}
+    {% trans "Welcome" %}
 {% endblock %}
 
 {% block content %}
@@ -19,24 +19,6 @@
 
 
 	<div class="container">
-{% block dashboard_nav %}
-		  {% include "oscar/partials/nav_primary.html" %}
-	{% endblock %}
-
-	{% block breadcrumbs %}
-		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item">
-					<a href="{% customer:home %}}">{% trans "Home" %}</a>
-				</li>
-				<li class="breadcrumb-item" aria-current="page">
-				  <a href="{% url 'Stalls:index' %}">{% trans "stalls" %}</a>
-				</li>
-				<li class="breadcrumb-item active" aria-current="page">{{ stall.name }}</li>
-			</ol>
-		</nav>
-	{% endblock %}
-
 
 		<div class="profile">
 

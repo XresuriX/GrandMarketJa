@@ -16,6 +16,7 @@ from django.views.generic import (
 )
 
 Stall = get_model('Stalls', 'Stall')
+StallStock = get_model('Stalls', 'StallStock')
 StallsCreateUpdateForm = get_class(
     'Stalls.forms', 'StallCreateUpdateForm')
 StallsSearchForm = get_class(
@@ -40,6 +41,12 @@ class StallDetailView(DetailView):
     model = Stall
     template_name = 'Stall/stall_details.html'
     context_object_name = 'stall'
+
+
+class StallStockDetailView(DetailView):
+    model = StallStock
+    template_name = 'Stall/stall_details.html'
+    context_object_name = 'stock'
 
 
 class StallCreateView(CreateView):

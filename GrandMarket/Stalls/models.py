@@ -5,6 +5,9 @@ from PIL import Image
 from django.urls import reverse
 from oscar.core.utils import get_default_currency
 from django.utils.functional import cached_property
+from oscar.apps.catalogue.abstract_models import AbstractCategory
+from oscar.models.fields.autoslugfield import AutoSlugField
+from oscar.core.compat import AUTH_USER_MODEL
 
 
 class Stall(models.Model):
@@ -13,6 +16,12 @@ class Stall(models.Model):
     owner = models.OneToOneField(
         AUTH_USER_MODEL, related_name="customeuser", unique=True, on_delete=models.CASCADE,
         blank=True, verbose_name=_("Manager"))
+    code = AutoSlugField(_("Code"), max_length=128, unique=True, db_index=True,
+                         populate_from='name')
+    category = models.ForeignKey(
+        'catalogue.Category',
+        on_delete=models.CASCADE, default='1',
+        verbose_name=_("Category"))
     primary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
     secondary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
@@ -35,8 +44,8 @@ class Stall(models.Model):
 
 
 class StallStock(models.Model):
-    owner = models.ForeignKey(
-        'Stall',
+    owner = models.OneToOneField(
+        Stall,
         on_delete=models.CASCADE,
         verbose_name=_("owner"),
         related_name='customuser')
@@ -47,10 +56,7 @@ class StallStock(models.Model):
         verbose_name=_("Product"))
     # Price info:
     price_currency = models.CharField(
-        _("Currency"), max_length=12, default=get_default_currency)
-    # Price info:
-    price_currency = models.CharField(
-        _("Currency"), max_length=12, default=get_default_currency)
+        _("Currency"), max_length=12, default='JMD')
 
     # This is the base price for calculations - whether this is inclusive or exclusive of
     # tax depends on your implementation, as this is highly domain-specific.
@@ -104,3 +110,4 @@ class StallStock(models.Model):
     def can_track_allocations(self):
         """Return True if the Product is set for stock tracking."""
         return self.product.get_product_class().track_stock
+

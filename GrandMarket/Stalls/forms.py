@@ -33,4 +33,4 @@ class StallSearchForm(forms.Form):
 class StallCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = Stall
-        fields = ('name', 'phone', 'image', 'primary_delivery_location', 'secondary_delivery_location')
+        fields = ('name', 'phone', 'image', 'primary_delivery_location', 'secondary_delivery_location', 'category',)
