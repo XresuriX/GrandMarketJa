@@ -4,13 +4,22 @@
 {% load category_tags %}
 {% load i18n %}
 {% load product_tags %}
-<base href="{% static '/' %}">
+
 {% block title %}
-{% trans "stalls" %} | {{ block.super }}
+{{ title }} | {{ block.super }}
 {% endblock %}
 
 {% block headertext %}
     {% trans "Welcome" %}
+{% endblock %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'customer:home' %}">{% trans "Home" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'Stalls:index' %}">{% trans "Stalls" %}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
 {% endblock %}
 
 {% block content %}
@@ -34,6 +43,8 @@
 
 				{% if request.user == stall.owner %}
 				<button class="btn profile-edit-btn"><a href="{% url 'Stalls:stall-update' stall.id %}">lorem</a> </button>
+				<button class="btn profile-edit-btn"><a href="{% url 'Stalls:dashboard' stall.id %}">lorem</a> </button>
+
 				{% endif %}
 
 				<button class="btn profile-settings-btn" aria-label="profile settings"><i class="fas fa-cog" aria-hidden="true"></i></button>

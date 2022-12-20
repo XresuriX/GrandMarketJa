@@ -1,30 +1,39 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from oscar.core.compat import AUTH_USER_MODEL
 from PIL import Image
 from django.urls import reverse
-from oscar.core.utils import get_default_currency
 from django.utils.functional import cached_property
-from oscar.apps.catalogue.abstract_models import AbstractCategory
+
 from oscar.models.fields.autoslugfield import AutoSlugField
 from oscar.core.compat import AUTH_USER_MODEL
 
 
 class Stall(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(null=True, max_length=200, default='download.png', upload_to='images/stall_img')
-    owner = models.OneToOneField(
-        AUTH_USER_MODEL, related_name="customeuser", unique=True, on_delete=models.CASCADE,
-        blank=True, verbose_name=_("Manager"))
-    code = AutoSlugField(_("Code"), max_length=128, unique=True, db_index=True,
-                         populate_from='name')
+    image = models.ImageField(null=True, max_length=200, default='download.png', upload_to='stall_img')
+
+    owner = models.ForeignKey(
+        AUTH_USER_MODEL, related_name="customeuser", on_delete=models.CASCADE,
+        blank=True, default='1', verbose_name=_("Manager"))
+
+    code = AutoSlugField(_("Code"), max_length=128, unique=True,
+                         db_index=True, populate_from='name')
+
     category = models.ForeignKey(
         'catalogue.Category',
         on_delete=models.CASCADE, default='1',
         verbose_name=_("Category"))
+
+    product = models.ForeignKey(
+        'StallStock',
+        on_delete=models.CASCADE,
+        blank=True, null=True,
+        related_name="stallstockrecords",
+        verbose_name=_("Product"))
+
     primary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
     secondary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
-    phone = models.CharField(max_length=20, null=True, blank=True)
+    contact_number = models.CharField(max_length=20, null=True, blank=True)
 
     class Meta:
         app_label = 'Stalls'
@@ -44,6 +53,7 @@ class Stall(models.Model):
 
 
 class StallStock(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
     owner = models.OneToOneField(
         Stall,
         on_delete=models.CASCADE,

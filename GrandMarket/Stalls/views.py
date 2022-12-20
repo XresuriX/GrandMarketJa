@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-
+from .filters import StallFilter
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 from oscar.core.loading import get_model, get_class
@@ -16,37 +16,54 @@ from django.views.generic import (
 )
 
 Stall = get_model('Stalls', 'Stall')
-StallStock = get_model('Stalls', 'StallStock')
 StallsCreateUpdateForm = get_class(
     'Stalls.forms', 'StallCreateUpdateForm')
 StallsSearchForm = get_class(
     'Stalls.forms', 'StallSearchForm')
 
+StallStock = get_model('Stalls', 'StallStock')
+StallStockCreateUpdateForm = get_class(
+    'Stalls.forms', 'StallStockCreateUpdateForm')
+
 
 class StallListView(ListView):
     model = Stall
     template_name = "Stall/stalls_list.html"
-    context_object_name = "stalls_list"
+    filterform_class = StallsSearchForm
 
-    def __init__(self):
-        super().__init__()
-        self.object_list = self.get_queryset()
+    def get_title(self):
+        data = getattr(self.filterform, 'cleaned_data', {})
 
-    def stalls_list(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        return render(request, self.template_name, context)
+        name = data.get('name', None)
+        city = data.get('primary_delivery_location', None)
+
+        if name and not city:
+            return gettext('Boutiques matching "%s"') % (name)
+        elif name and city:
+            return gettext('Boutiques matching "%s" near "%s"') % (name, city)
+        elif city:
+            return gettext('Boutiques near "%s"') % (city)
+        else:
+            return gettext('Boutiques')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['filterform'] = self.filterform
+        data['queryset_description'] = self.get_title()
+        return data
+
+    def get_queryset(self):
+        qs = self.model.objects.all()
+        self.filterform = self.filterform_class(self.request.GET)
+        if self.filterform.is_valid():
+            qs = self.filterform.apply_filters(qs)
+        return qs
 
 
 class StallDetailView(DetailView):
     model = Stall
     template_name = 'Stall/stall_details.html'
     context_object_name = 'stall'
-
-
-class StallStockDetailView(DetailView):
-    model = StallStock
-    template_name = 'Stall/stall_details.html'
-    context_object_name = 'stock'
 
 
 class StallCreateView(CreateView):
@@ -107,3 +124,64 @@ class StallDeleteView(DeleteView):
     model = Stall
     template_name = "Stall/stall_delete.html"
     success_url = reverse_lazy('Stalls:index')
+
+
+class StallDashboardView(DetailView):
+    model = StallStock
+    template_name = 'Stall/stall_dashboard.html'
+
+
+class StallStockCreateView(CreateView):
+    model = StallStock
+    template_name = 'Stall/stallstock_update.html'
+    form_class = StallStockCreateUpdateForm
+    success_url = reverse_lazy('Stalls:index')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['name'] = _('Create new Stalls stock')
+        return ctx
+
+    def forms_invalid(self, form, inlines):
+        messages.error(
+            self.request,
+            "Your submitted data was not valid - please correct the below errors")
+        return super().forms_invalid(form, inlines)
+
+    def forms_valid(self, form, inlines):
+        form.instance.owner = self.request.user
+        response = super().forms_valid(form, inlines)
+        msg = render_to_string('Stall/messages/stall_saved.html',
+                               {'Stalls': self.object})
+        messages.success(self.request, msg, extra_tags='safe')
+        return response
+
+
+class StallStockUpdateView(UserPassesTestMixin, UpdateView, LoginRequiredMixin):
+    model = StallStock
+    template_name = "Stall/stallstock_update.html"
+    form_class = StallStockCreateUpdateForm
+    context_object_name = 'stallstock'
+
+    def test_func(self):
+        stall = self.get_object()
+        return stall.owner == self.request.user
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['title'] = self.object.name
+        return ctx
+
+    def forms_invalid(self, form, inlines):
+        messages.error(
+            self.request,
+            "Your submitted data was not valid - please correct the below errors")
+        return super().forms_invalid(form, inlines)
+
+    def forms_valid(self, form, inlines):
+        msg = render_to_string('Stall/messages/stall_saved.html',
+                               {'Stalls': self.object})
+        messages.success(self.request, msg, extrforms_valida_tags='safe')
+        return super().forms_valid(form, inlines)
+
+

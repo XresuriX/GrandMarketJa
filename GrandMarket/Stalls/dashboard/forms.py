@@ -12,7 +12,9 @@ class DashboardStallSearchForm(forms.Form):
 
     def is_empty(self):
         d = getattr(self, 'cleaned_data', {})
+
         def empty(key): return not d.get(key, None)
+
         return empty('name') and empty('primary_delivery_location')
 
     def apply_primary_delivery_location_filter(self, qs, value):
@@ -22,6 +24,9 @@ class DashboardStallSearchForm(forms.Form):
 
     def apply_name_filter(self, qs, value):
         return qs.filter(name__icontains=value)
+
+    """def apply_name_filter(self, qs, value):
+        return qs.filter(name__icontains=value)"""
 
     def apply_filters(self, qs):
         for key, value in self.cleaned_data.items():

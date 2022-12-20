@@ -2,9 +2,32 @@
 
 {% load i18n %}
 {% load product_tags %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+{{ title }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'customer:home' %}">{% trans "Home" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'Stalls:index' %}">{% trans "Stalls" %}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock %}
 
 {% block content %}
-
+    <div class="card card-body">
+      <form method="get" class="form-inline">
+        {% include "oscar/dashboard/partials/form_fields_inline.html" with form=filterform %}
+        <button type="submit" class="btn btn-primary">{% trans "Search" %}</button>
+        {% if not filterform.is_empty %}
+        <a href="?" class="btn">{% trans "Reset" %}</a>
+        {% endif %}
+      </form>
+    </div>
         {% for stall in object_list %}
         <p>
           <h2><img src="{{ stalls_list.image }}"><a href="{% url 'Stalls:details' stall.pk %}">{{ stall.name }}</a></h2>

@@ -1,4 +1,4 @@
-{% extends 'oscar/base.html' %}
+{% extends 'oscar/layout.html' %}
 {% load i18n static %}
 
 {% block title %}
@@ -7,17 +7,17 @@
 
 
 {% block headertext %}{{ title }}{% endblock %}
-
-{% block content %}
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'customer:home' %}">{% trans "Home" %}</a></li>
     <li class="breadcrumb-item"><a href="{% url 'Stalls:index' %}">{% trans "Stalls" %}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }} {% trans "Update" %}</li>
   </ol>
 </nav>
 {% endblock %}
+{% block content %}
+
 
 {% if form.errors %}
 <div class="alert alert-danger">

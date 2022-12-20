@@ -78,6 +78,8 @@ INSTALLED_APPS = [
     'Stalls.apps.StallsConfig',
     'Stalls.dashboard.apps.DashboardConfig',
     'django_filters',
+    'crispy_forms',
+    'crispy_bootstrap5',
 
     # 3rd-party apps that oscar depends on
     'widget_tweaks',
@@ -199,10 +201,10 @@ MEDIA_URL = 'oscar/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/oscar/images')
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static/")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = '/static'
 
-OSCAR_DEFAULT_CURRENCY = 'USD'
-
+OSCAR_DEFAULT_CURRENCY = 'JMD'
 OSCAR_SHOP_NAME = 'GrandMarket'
 OSCAR_SHOP_TAGLINE = 'We have it all'
 
@@ -248,3 +250,6 @@ OSCAR_CURRENCY_FORMAT = {
     }
 }
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"

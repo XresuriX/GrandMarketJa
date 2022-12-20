@@ -1,7 +1,14 @@
 {% extends "oscar/layout.html" %}
 {% load i18n %}
 {% load static%}
-
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'customer:home' %}">{% trans "Home" %}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock %}
 
 {% block content %}
  <!-- Carousel Start -->

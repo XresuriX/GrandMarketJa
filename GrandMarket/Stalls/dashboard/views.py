@@ -16,7 +16,6 @@ DashboardStallsSearchForm = get_class(
 class DashboardStallsListView(generic.ListView):
     model = Stalls
     template_name = "dashboard/Stall/stalls_list.html"
-    context_object_name = "Stalls_list"
     filterform_class = DashboardStallsSearchForm
 
     def get_title(self):
@@ -26,11 +25,11 @@ class DashboardStallsListView(generic.ListView):
         city = data.get('primary_delivery_location', None)
 
         if name and not city:
-            return gettext('Stalls matching "%s"') % name
+            return gettext('Stalls matching "%s"') % (name)
         elif name and city:
             return gettext('Stalls matching "%s" near "%s"') % (name, city)
         elif city:
-            return gettext('Stalls near "%s"') % city
+            return gettext('Stalls near "%s"') % (city)
         else:
             return gettext('Stalls')
 

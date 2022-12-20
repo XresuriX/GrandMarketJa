@@ -39,7 +39,7 @@
     {% endif %}
   </form>
 </div>
-{% if Stalls_list.count %}
+{% if stall.count %}
 <form method="post" class="order_table">
   {% csrf_token %}
   <table class="table table-striped table-bordered">
@@ -49,7 +49,7 @@
       <th>{% trans "Owner" %}</th>
       <th>{% trans "Actions" %}</th>
     </tr>
-    {% for Stall in Stall_list %}
+    {% for Stall in Stalls_list %}
     <tr>
       <th><a href="{% url 'Stalls-dashboard:stall-update' stall.id %}">{{ Stall.name }}</a></th>
       <td>{{ Stall.primary_delivery_location }}</td>
