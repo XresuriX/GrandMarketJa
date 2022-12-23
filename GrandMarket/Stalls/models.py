@@ -12,9 +12,9 @@ class Stall(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(null=True, max_length=200, default='download.png', upload_to='stall_img')
 
-    owner = models.ForeignKey(
+    owner = models.OneToOneField(
         AUTH_USER_MODEL, related_name="customeuser", on_delete=models.CASCADE,
-        blank=True, default='1', verbose_name=_("Manager"))
+        blank=True, verbose_name=_("Manager"))
 
     code = AutoSlugField(_("Code"), max_length=128, unique=True,
                          db_index=True, populate_from='name')

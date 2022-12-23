@@ -89,6 +89,8 @@ class StallCreateView(CreateView):
         msg = render_to_string('Stall/messages/stall_saved.html',
                                {'Stalls': self.object})
         messages.success(self.request, msg, extra_tags='safe')
+        Stall.owner = self.request.user
+        Stall.save()
         return response
 
 
