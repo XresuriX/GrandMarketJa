@@ -4,10 +4,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from oscar.core.compat import AUTH_USER_MODEL
 from oscar.apps.customer import abstract_models
+from Stalls.models import Stall
 
 
 # An extension of the core Oscar User model
 class CustomUser(abstract_models.AbstractUser):
+    #stall = models.OneToOneField(Stall, related_name="Stall_owned", on_delete=models.CASCADE,
+    #    blank=True, verbose_name=_("Stall"), null=True)
     def __str__(self):
         return self.email
 

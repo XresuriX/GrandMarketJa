@@ -9,9 +9,8 @@ from oscar.core.compat import AUTH_USER_MODEL
 
 
 class Stall(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255, blank=False, null=False, default='MyStall')
     image = models.ImageField(null=True, max_length=200, default='download.png', upload_to='stall_img')
-
     owner = models.OneToOneField(
         AUTH_USER_MODEL, related_name="customeuser", on_delete=models.CASCADE,
         blank=True, verbose_name=_("Manager"))
@@ -31,7 +30,7 @@ class Stall(models.Model):
         related_name="stallstockrecords",
         verbose_name=_("Product"))
 
-    primary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
+    primary_delivery_location = models.CharField(max_length=150, blank=False, null=False, default='kingston')
     secondary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
     contact_number = models.CharField(max_length=20, null=True, blank=True)
 
