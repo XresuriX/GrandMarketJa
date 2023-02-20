@@ -4,17 +4,18 @@ from Tests.factories import *
 
 register(UserFactory)
 register(StallFactory)
-register(AttributeOptionFactory)
-register(ProductAttributeFactory)
-register(ProductAttributeValueFactory)
+register(StallStockFactory)
+#register(AttributeOptionFactory)
+#register(ProductAttributeFactory)
+#register(ProductAttributeValueFactory)
 register(ProductFactory)
-register(ProductCategoryFactory)
-register(ProductClassFactory)
-register(ProductImageFactory)
-register(ProductRecommendationFactory)
-register(AttributeOptionGroupFactory)
+#register(ProductCategoryFactory)
+#register(ProductClassFactory)
+#register(ProductImageFactory)
+#register(ProductRecommendationFactory)
+#register(AttributeOptionGroupFactory)
 register(CategoryFactory)
-register(OptionsFactory)
+#register(OptionsFactory)
 
 
 @pytest.mark.django_db

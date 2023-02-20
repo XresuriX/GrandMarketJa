@@ -77,20 +77,19 @@ class StallCreateView(CreateView):
         ctx['title'] = _('Create new Stalls')
         return ctx
 
-    def forms_invalid(self, form, inlines):
+    def form_invalid(self, form):
         messages.error(
             self.request,
             "Your submitted data was not valid - please correct the below errors")
-        return super().forms_invalid(form, inlines)
+        return super().form_invalid(form)
 
-    def forms_valid(self, form, inlines):
-        response = super().forms_valid(form, inlines)
-
+    def form_valid(self, form):
+        response = super().form_valid(form)
         msg = render_to_string('Stall/messages/stall_saved.html',
-                               {'Stalls': self.object})
+                               {'Stall': self.object})
         messages.success(self.request, msg, extra_tags='safe')
-        Stall.owner = self.request.user
-        Stall.save()
+        self.object.owner = self.request.user
+        self.object.save()
         return response
 
 

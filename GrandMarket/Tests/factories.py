@@ -3,12 +3,13 @@ import factory
 from factory.django import DjangoModelFactory
 from faker import Faker
 from Stalls.models import Stall, StallStock
+from decimal import Decimal as D
 
+
+
+from oscar.core.loading import get_model
+from oscar.test.factories import ProductFactory, CategoryFactory
 from oscar.core.compat import AUTH_USER_MODEL
-from oscar.apps.catalogue.abstract_models import *
-
-
-
 
 fake = Faker()
 
@@ -22,21 +23,35 @@ class UserFactory(DjangoModelFactory):
     is_active = "True"
     is_staff = "True"
 
-class StallFactory(DjangoModelFactory):
-    class Meta:
-        model = Stall
 
+class StallFactory(DjangoModelFactory):
     name = factory.LazyAttribute(lambda _: fake.name())
     image = factory.LazyAttribute(lambda _: fake.file_name(category='image'))
     owner = factory.SubFactory(UserFactory)
     code = factory.LazyAttribute(lambda _: fake.slug())
-    category = factory.LazyAttribute(lambda _: fake.name("stall"))
-    product = factory.LazyAttribute(lambda _: fake.name())
+    category = factory.SubFactory(CategoryFactory)
     primary_delivery_location = factory.LazyAttribute(lambda _: fake.address())
     secondary_delivery_location = factory.LazyAttribute(lambda _: fake.address())
     contact_number = factory.LazyAttribute(lambda _: fake.phone_number())
 
+    class Meta:
+        model = Stall
 
+class StallStockFactory(DjangoModelFactory):
+    owner = factory.SubFactory(Stall)
+    product = factory.SubFactory(ProductFactory)
+    price_currency = 'JMD'
+    price = D('12000.99') 
+    num_in_stock = factory.LazyAttribute(lambda _: fake.random_int())
+    num_allocated = factory.LazyAttribute(lambda _: fake.random_int())
+    low_stock_threshold = '5'
+    date_created = factory.LazyAttribute(lambda _: fake.date())
+    date_updated = factory.LazyAttribute(lambda _: fake.date())
+    
+    class Meta:
+        model = StallStock
+
+"""from oscar.apps.catalogue.abstract_models import *
 class AttributeOptionGroupFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = AbstractAttributeOptionGroup
@@ -61,7 +76,7 @@ class OptionsFactory(factory.django.DjangoModelFactory):
     required = factory.LazyAttribute(lambda _: fake.boolean())
     option_group = factory.SubFactory(AttributeOptionGroupFactory)
     help_text = factory.LazyAttribute(lambda _: fake.paragraph())
-    order = factory.LazyAttribute(lambda _: fake.random_int())
+    order = 
 
 
 class ProductClassFactory(factory.django.DjangoModelFactory):
@@ -166,3 +181,14 @@ class ProductImageFactory(factory.django.DjangoModelFactory):
     original = factory.LazyAttribute(lambda _: fake.file_name(category='image'))
     display_order = factory.LazyAttribute(lambda _: fake.random_int())
     date_created = factory.LazyAttribute(lambda _: fake.date())
+
+
+
+
+
+class StoreAddressFactory(factory.django.DjangoModelFactory):
+    country = factory.SubFactory()
+
+    class Meta:
+        model = get_model('stores', 'StoreAddress')
+"""
