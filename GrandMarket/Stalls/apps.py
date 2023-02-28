@@ -23,10 +23,10 @@ class StallsConfig(OscarConfig):
         self.stalls_delete_view = get_class(
             'Stalls.views', 'StallDeleteView')
 
-        """self.stallstock_create_view = get_class(
+        self.stallstock_create_view = get_class(
             'Stalls.views', 'StallStockCreateView')
         self.stallstock_update_view = get_class(
-            'Stalls.views', 'StallStockUpdateView')"""
+            'Stalls.views', 'StallStockUpdateView')
 
     def get_urls(self):
         urls = super().get_urls()
@@ -37,7 +37,8 @@ class StallsConfig(OscarConfig):
             path('create/', self.stalls_create_view.as_view(), name='stall-create'),
             path('update/<int:pk>/', self.stalls_update_view.as_view(), name='stall-update'),
             path('delete/<int:pk>/', self.stalls_delete_view.as_view(), name='stall-delete'),
-
+            path('create/stock/<int:pk>', self.stallstock_create_view.as_view(), name='stall-stock-create'),
+            path('update/stock/<int:pk>', self.stallstock_update_view.as_view(), name='stall-stock-update'),
 
 
 
@@ -45,5 +46,4 @@ class StallsConfig(OscarConfig):
         return self.post_process_urls(urls)
 
 
-"""path('create/stock/<int:pk>', self.stallstock_create_view.as_view(), name='stall-stock-create'),
-            path('update/stock/<int:pk>', self.stallstock_update_view.as_view(), name='stall-stock-update'),"""
+""""""

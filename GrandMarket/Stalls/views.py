@@ -84,11 +84,12 @@ class StallCreateView(CreateView):
         return super().form_invalid(form)
 
     def form_valid(self, form):
+        form.instance.owner = self.request.user
         response = super().form_valid(form)
         msg = render_to_string('Stall/messages/stall_saved.html',
                                {'Stall': self.object})
         messages.success(self.request, msg, extra_tags='safe')
-        self.object.owner = self.request.user
+        
         self.object.save()
         return response
 

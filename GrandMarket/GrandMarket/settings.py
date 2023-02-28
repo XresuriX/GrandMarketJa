@@ -228,7 +228,7 @@ EMAIL_SUBJECT_PREFIX = '[GrandMarket Ja] '
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 OSCAR_HOMEPAGE = reverse_lazy('customer:home')
-
+OSCAR_REQUIRED_ADDRESS_FIELDS = 'first_name', 'last_name', 'line1', 'line4', 'country'
 OSCAR_DASHBOARD_NAVIGATION += [
     {
         'label': _('Stalls'),

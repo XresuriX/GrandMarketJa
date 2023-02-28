@@ -13,7 +13,7 @@ class TestStallModel():
         assert True
 
     
-    def test_create_new_stall(new_user_1, stall_factory):
+    def test_create_new_stall(new_user_1, stall_factory, option_factory):
         stall = stall_factory.build()
         count = stall.objects.all().count
         print(count)

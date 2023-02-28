@@ -15,7 +15,7 @@ register(ProductFactory)
 #register(ProductRecommendationFactory)
 #register(AttributeOptionGroupFactory)
 register(CategoryFactory)
-#register(OptionsFactory)
+register(OptionFactory)
 
 
 @pytest.mark.django_db

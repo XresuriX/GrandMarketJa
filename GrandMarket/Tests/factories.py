@@ -1,4 +1,5 @@
 import pytest
+from django.db.models import Model
 import factory
 from factory.django import DjangoModelFactory
 from faker import Faker
@@ -8,7 +9,7 @@ from decimal import Decimal as D
 
 
 from oscar.core.loading import get_model
-from oscar.test.factories import ProductFactory, CategoryFactory
+from oscar.test.factories import ProductFactory, CategoryFactory, OptionFactory
 from oscar.core.compat import AUTH_USER_MODEL
 
 fake = Faker()
@@ -50,6 +51,8 @@ class StallStockFactory(DjangoModelFactory):
     
     class Meta:
         model = StallStock
+
+    
 
 """from oscar.apps.catalogue.abstract_models import *
 class AttributeOptionGroupFactory(factory.django.DjangoModelFactory):

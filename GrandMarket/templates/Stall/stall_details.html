@@ -43,7 +43,7 @@
 
 				{% if request.user == stall.owner %}
 				<button class="btn profile-edit-btn"><a href="{% url 'Stalls:stall-update' stall.id %}">lorem</a> </button>
-				<button class="btn profile-edit-btn"><a href="{% url 'Stalls:dashboard' stall.id %}">lorem</a> </button>
+				<button class="btn profile-edit-btn"><a href="{% url 'Stalls:stall-stock-update' stall.id %}">lorem</a> </button>
 
 				{% endif %}
 
