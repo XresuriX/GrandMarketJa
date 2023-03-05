@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'oscar.apps.catalogue.apps.CatalogueConfig',
     'oscar.apps.catalogue.reviews.apps.CatalogueReviewsConfig',
     'oscar.apps.communication.apps.CommunicationConfig',
-    'oscar.apps.partner.apps.PartnerConfig',
+    'apps.partner.apps.PartnerConfig',
     'oscar.apps.basket.apps.BasketConfig',
     'oscar.apps.payment.apps.PaymentConfig',
     'oscar.apps.offer.apps.OfferConfig',
@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     'oscar.apps.dashboard.orders.apps.OrdersDashboardConfig',
     'oscar.apps.dashboard.catalogue.apps.CatalogueDashboardConfig',
     'oscar.apps.dashboard.offers.apps.OffersDashboardConfig',
-    'oscar.apps.dashboard.partners.apps.PartnersDashboardConfig',
+    'apps.dashboard.partners.apps.PartnersDashboardConfig',
     'oscar.apps.dashboard.pages.apps.PagesDashboardConfig',
     'oscar.apps.dashboard.ranges.apps.RangesDashboardConfig',
     'oscar.apps.dashboard.reviews.apps.ReviewsDashboardConfig',
@@ -94,6 +94,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'oscar.apps.basket.middleware.BasketMiddleware',
 ]
 
 ROOT_URLCONF = 'src.urls'
