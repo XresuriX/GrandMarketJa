@@ -17,14 +17,16 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = AUTH_USER_MODEL
 
-    email = "a@a.com"
+    email = factory.LazyAttribute(lambda _: fake.email())
     first_name = "tester"
     password = "tester"
     is_active = "True"
     is_staff = "True"
 
-class PartnersFactory(DjangoModelFactory):
+class PartnersFactory(DjangoModelFactory ):
     name = factory.LazyAttribute(lambda _: fake.name())
+    code = factory.LazyAttribute(lambda _: fake.slug())
+    users = factory.SubFactory(UserFactory)
     image = factory.LazyAttribute(lambda _: fake.file_name(category='image'))
     primary_delivery_location = factory.LazyAttribute(lambda _: fake.address())
     secondary_delivery_location = factory.LazyAttribute(lambda _: fake.address())
@@ -48,6 +50,24 @@ class PartnersFactory(DjangoModelFactory):
     
 
 """
+    primary_delivery_location = models.CharField(max_length=150, blank=False, null=False, default='kingston')
+    secondary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
+    contact_number = models.CharField(max_length=20, null=True, blank=True)
+    image = models.ImageField(
+        _("Image"),
+        upload_to="images/partner-images",
+        blank=True, null=True)
+    group = models.ForeignKey(
+        'PartnerGroup',
+        models.PROTECT,
+        related_name='partners',
+        verbose_name=_("Group"),
+        null=True,
+        blank=True
+    )
+
+    is_pickup_store = models.BooleanField(_("Is pickup store"), default=True)
+    is_active =
 class StallStockFactory(DjangoModelFactory):
     owner = factory.SubFactory(Stall)
     product = factory.SubFactory(ProductFactory)
