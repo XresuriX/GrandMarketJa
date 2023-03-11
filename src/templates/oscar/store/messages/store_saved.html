@@ -1,0 +1,6 @@
+{% load i18n %}
+{% blocktrans with name=Store.name %}
+<strong>{{ name }}</strong> Stall saved.
+{% endblocktrans %}
+<a href="{{ Partner.get_absolute_url }}" class="btn btn-success btn-sm">{% trans "View on site" %}</a>
+<a href="#" class="btn btn-warning btn-sm">{% trans "Edit again" %}</a>

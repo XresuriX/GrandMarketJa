@@ -1,0 +1,38 @@
+{% extends "oscar/layout.html" %}
+
+{% load i18n %}
+{% load product_tags %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+{{ title }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'customer:home' %}">{% trans "Home" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'partner:index' %}">{% trans "Stores" %}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+    <div class="card card-body">
+      <form method="get" class="form-inline">
+        {% include "oscar/dashboard/partials/form_fields_inline.html" with form=filterform %}
+        <button type="submit" class="btn btn-primary">{% trans "Search" %}</button>
+        {% if not filterform.is_empty %}
+        <a href="?" class="btn">{% trans "Reset" %}</a>
+        {% endif %}
+      </form>
+    </div>
+        {% for store in object_list %}
+        <p>
+          <h2><img src="{{ stores_list.image }}"><a href="{% url 'partner:store-details' store.pk %}">{{ store.name }}</a></h2>
+          <!---The stall is in: {{ stall.city }}-->
+        </p> <hr/>
+        {% endfor %}
+    
+{% endblock content %}
