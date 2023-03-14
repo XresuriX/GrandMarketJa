@@ -1,4 +1,5 @@
 from django.db import models
+from src import settings
 from oscar.apps.partner.abstract_models import AbstractPartner
 from oscar.core.utils import slugify
 from django.utils.translation import gettext as _
