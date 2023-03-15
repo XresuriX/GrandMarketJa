@@ -62,8 +62,6 @@ class ExistingUserForm(forms.ModelForm):
     """
     role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect,
                              label=_('User role'))
-    
-
     def __init__(self, *args, **kwargs):
         user = kwargs['instance']
         role = 'staff' if user.is_staff else 'limited'
@@ -86,10 +84,10 @@ class ExistingUserForm(forms.ModelForm):
             user.user_permissions.remove(dashboard_perm)
         return user
 
-    class Meta:
-        model = AUTH_USER_MODEL
-        fields = existing_user_fields(
-            ['first_name', 'last_name'])
+        class Meta:
+            model = AUTH_USER_MODEL
+            fields = existing_user_fields(
+                ['first_name', 'last_name'])
         
 """ + ['age']"""
 

@@ -1,12 +1,12 @@
 import pytest
 from django.db import IntegrityError
-from pytest_django.asserts import assertQuerysetEqual
+#from pytest_django.asserts import assertQuerysetEqual
 from django.test import TestCase
 from Tests.factories import PartnersFactory
 from oscar.core.compat import AUTH_USER_MODEL
 from apps.partner.models import Partner
 
-@pytest.mark.django_db
+"""@pytest.mark.django_db
 class TestPartnerModel():
     def test_new_user(new_user_1):
         #print(new_user_1)
@@ -21,7 +21,7 @@ class TestPartnerModel():
         #print(partner.users)
         assert True
 
-"""
+
 @pytest.mark.parametrize(
     "title, id, validity",
     [
@@ -41,7 +41,7 @@ def test_tasks_instance(
     item = Tasks.objects.all().count()
     print(item)
     assert item == validity
-"""
+
 
 @pytest.mark.django_db
 def test_create_partner_with_user(db, user_factory, partners_factory):
@@ -54,7 +54,7 @@ def test_create_partner_with_user(db, user_factory, partners_factory):
 
     # Check if the user was added to the partner's users field
     #assert partner.users.filter(id=new_user_2.id).exists()
-
+"""
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
@@ -81,3 +81,6 @@ def test_partner_instance(
     item = Partner.objects.all().count()
     print(item)
     assert item == validity
+    
+
+

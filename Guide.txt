@@ -1,3 +1,4 @@
+python -m venv venv
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 python -m pytest
@@ -17,7 +18,7 @@ Example = get_model('Appname', 'Name of the model')
 
 
 for pytest
-export DJANGO_SETTINGS_MODULE=GrandMarket.settings
+export DJANGO_SETTINGS_MODULE=src.settings
 
 
 from django.db import models

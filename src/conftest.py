@@ -1,6 +1,6 @@
 import pytest
 from pytest_factoryboy import register
-from Tests.factories import * 
+from Tests.factories import PartnersFactory, UserFactory, ProductFactory, CategoryFactory, OptionFactory
 
 register(UserFactory)
 #register(AttributeOptionFactory)
@@ -28,3 +28,13 @@ def new_partner_1(db, partners_factory):
     partner = partners_factory.create()
     print(partner.name)
     return partner
+
+@pytest.mark.django_db
+@pytest.fixture()
+def pass_data():
+    return {'first_name': 'Test', 'last_name': 'User', 'role': 'limited'}
+
+@pytest.mark.django_db
+@pytest.fixture()
+def fail_data():
+    return {'first_name': '', 'last_name': 'User', 'role': 'none'}
