@@ -44,7 +44,7 @@ class StoreCreateView(CreateView):
     model = Partner
     template_name = 'oscar/store/store_update.html'
     form_class = NewPartner
-    success_url = reverse_lazy('store-user-update')
+    success_url = reverse_lazy('partner:index')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -94,4 +94,4 @@ class StoreUserUpdateView(UpdateView):
         name = self.object.get_full_name() or self.object.email
         messages.success(self.request,
                          _("User '%s' was updated successfully.") % name)
-        return reverse('partner:store-details')
+        return reverse('partner:index')

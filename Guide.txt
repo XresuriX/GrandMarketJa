@@ -21,203 +21,39 @@ for pytest
 export DJANGO_SETTINGS_MODULE=src.settings
 
 
-from django.db import models
+what is wrong with the reverse for this view 
 
-from oscar.apps.partner.abstract_models import AbstractPartner
+class StoreCreateView(CreateView):
+    model = Partner
+    template_name = 'oscar/store/store_update.html'
+    form_class = NewPartner
+    success_url = reverse_lazy('partner:user-update')
 
-class Partner(AbstractPartner):
-    primary_delivery_location = models.CharField(max_length=150, blank=False, null=False, default='kingston')
-    secondary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
-    contact_number = models.CharField(max_length=20, null=True, blank=True)
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['title'] = _('Create new partner')
+        return ctx
 
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Store '%s' was created successfully.") %
+                         self.object.name)
+        return reverse('partner:user-update')
+    
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your submitted data was not valid - please correct the below errors")
+        return super().form_invalid(form)
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
-class StallStock(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
-    owner = models.OneToOneField(
-        Stall,
-        on_delete=models.CASCADE,
-        verbose_name=_("owner"),
-        related_name='customuser')
-    product = models.ForeignKey(
-        'catalogue.Product',
-        on_delete=models.CASCADE,
-        related_name="stallstockrecords",
-        verbose_name=_("Product"))
-    # Price info:
-    price_currency = models.CharField(
-        _("Currency"), max_length=12, default='JMD')
-
-    # This is the base price for calculations - whether this is inclusive or exclusive of
-    # tax depends on your implementation, as this is highly domain-specific.
-    # It is nullable because some items don't have a fixed
-    # price but require a runtime calculation (possibly from an external service).
-    price = models.DecimalField(
-        _("Price"), decimal_places=2, max_digits=12,
-        blank=True, null=True)
-
-    #: Number of items in stock
-    num_in_stock = models.PositiveIntegerField(
-        _("Number in stock"), blank=True, null=True)
-
-    #: The amount of stock allocated to orders but not fed back to the master
-    #: stock system.  A typical stock update process will set the
-    #: :py:attr:`.num_in_stock` variable to a new value and reset
-    #: :py:attr:`.num_allocated` to zero.
-    num_allocated = models.IntegerField(
-        _("Number allocated"), blank=True, null=True)
-
-    #: Threshold for low-stock alerts.  When stock goes beneath this threshold,
-    #: an alert is triggered so warehouse managers can order more.
-    low_stock_threshold = models.PositiveIntegerField(
-        _("Low Stock Threshold"), blank=True, null=True)
-
-    # Date information
-    date_created = models.DateTimeField(_("Date created"), auto_now_add=True)
-    date_updated = models.DateTimeField(_("Date updated"), auto_now=True,
-                                        db_index=True)
-
-    class Meta:
-        app_label = 'Stalls'
-        verbose_name = _("Stall Stock")
-        verbose_name_plural = _("Stall Stocks")
-
-    @property
-    def net_stock_level(self):
-        """
-        The effective number in stock (e.g. available to buy).
-        This is correct property to show the customer, not the
-        :py:attr:`.num_in_stock` field as that doesn't account for allocations.
-        This can be negative in some unusual circumstances
-        """
-        if self.num_in_stock is None:
-            return 0
-        if self.num_allocated is None:
-            return self.num_in_stock
-        return self.num_in_stock - self.num_allocated
-
-    @cached_property
-    def can_track_allocations(self):
-        """Return True if the Product is set for stock tracking."""
-        return self.product.get_product_class().track_stock
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
-
-
-how can i write a factory that inherits from this factory and saves the user created by the UserFactory as the user of the partner object
-
-class UserFactory(DjangoModelFactory):
-    class Meta:
-        model = AUTH_USER_MODEL
-
-    email = "a@a.com"
-    first_name = "tester"
-    password = "tester"
-    is_active = "True"
-    is_staff = "True"
-
-class AbstractPartner(models.Model):
-    """
-    A fulfilment partner. An individual or company who can fulfil products.
-    E.g. for physical goods, somebody with a warehouse and means of delivery.
-    Creating one or more instances of the Partner model is a required step in
-    setting up an Oscar deployment. Many Oscar deployments will only have one
-    fulfilment partner.
-    """
-    code = AutoSlugField(_("Code"), max_length=128, unique=True, db_index=True,
-                         populate_from='name')
-    name = models.CharField(
-        pgettext_lazy("Partner's name", "Name"), max_length=128, blank=True, db_index=True)
-
-    #: A partner can have users assigned to it. This is used
-    #: for access modelling in the permission-based dashboard
-    users = models.ManyToManyField(
-        AUTH_USER_MODEL, related_name="partners",
-        blank=True, verbose_name=_("Users"))
-
-    @property
-    def display_name(self):
-        return self.name or self.code
-
-    @property
-    def primary_address(self):
-        """
-        Returns a partners primary address. Usually that will be the
-        headquarters or similar.
-        This is a rudimentary implementation that raises an error if there's
-        more than one address. If you actually want to support multiple
-        addresses, you will likely need to extend PartnerAddress to have some
-        field or flag to base your decision on.
-        """
-        addresses = self.addresses.all()
-        if len(addresses) == 0:  # intentionally using len() to save queries
-            return None
-        elif len(addresses) == 1:
-            return addresses[0]
-        else:
-            raise NotImplementedError(
-                "Oscar's default implementation of primary_address only "
-                "supports one PartnerAddress.  You need to override the "
-                "primary_address to look up the right address")
-
-    def get_address_for_stockrecord(self, stockrecord):
-        """
-        Stock might be coming from different warehouses. Overriding this
-        function allows selecting the correct PartnerAddress for the record.
-        That can be useful when determining tax.
-        """
-        return self.primary_address
-
-    class Meta:
-        abstract = True
-        app_label = 'partner'
-        ordering = ('name', 'code')
-        permissions = (('dashboard_access', 'Can access dashboard'), )
-        verbose_name = _('Fulfillment partner')
-        verbose_name_plural = _('Fulfillment partners')
-
-    def __str__(self):
-        return self.display_name
-
-class Partner(AbstractPartner):
-    slug = models.SlugField(_('Slug'), max_length=100, default='partner', unique=True)
-    primary_delivery_location = models.CharField(max_length=150, blank=False, null=False, default='kingston')
-    secondary_delivery_location = models.CharField(max_length=150, blank=True, null=True)
-    contact_number = models.CharField(max_length=20, null=True, blank=True)
-    image = models.ImageField(
-        _("Image"),
-        upload_to="images/partner-images",
-        blank=True, null=True)
-    group = models.ForeignKey(
-        'PartnerGroup',
-        models.PROTECT,
-        related_name='partners',
-        verbose_name=_("Group"),
-        null=True,
-        blank=True
-    )
-
-    is_pickup_store = models.BooleanField(_("Is pickup store"), default=True)
-    is_active = models.BooleanField(_("Is active"), default=True)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
-
-class PartnerFactory(factory.django.DjangoModelFactory):
-    name = "Gardners"
-
-    class Meta:
-        model = get_model('partner', 'Partner')
-
-    @factory.post_generation
-    def users(self, create, extracted, **kwargs):
-        if not create:
-            return
-
-        if extracted:
-            for user in extracted:
-                self.users.add(user)
-
+path('store/<int:partner_pk>/user/<int:user_pk>/update/', self.store_user_update_view.as_view(), name='user-update'),

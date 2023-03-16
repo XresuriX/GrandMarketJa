@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from django import forms
 from django.db.models import Q
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from oscar.core.loading import get_model
 from oscar.core.compat import existing_user_fields, AUTH_USER_MODEL
@@ -22,8 +23,7 @@ class NewPartner(PartnerCreateForm):
             self.fields['users'].queryset = get_user_model().objects.filter(pk=user.pk)
             self.fields['users'].initial = user.pk
             self.fields['users'].widget.attrs['hidden'] = True
-            self.fields['role'].widget.attrs['hidden'] = True
-
+            
         self.fields['name'].required = True
 
     class Meta:
@@ -84,10 +84,10 @@ class ExistingUserForm(forms.ModelForm):
             user.user_permissions.remove(dashboard_perm)
         return user
 
-        class Meta:
-            model = AUTH_USER_MODEL
-            fields = existing_user_fields(
-                ['first_name', 'last_name'])
+    class Meta:
+        model = get_user_model()
+        fields = existing_user_fields(
+            ['first_name', 'last_name'])
         
 """ + ['age']"""
 

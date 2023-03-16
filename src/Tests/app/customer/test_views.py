@@ -16,4 +16,4 @@ def test_redirect_to_home_when_logged_out(client):
     url = urls.reverse('home')
     resp = client.get(url)
     assert resp.status_code == 302
-    #assert resp.url == urls.reverse('')
+    assert resp.url == urls.reverse('customer:home')
