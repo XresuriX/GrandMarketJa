@@ -19,8 +19,9 @@ class PartnerConfig(apps.PartnerConfig):
                 'partner.views', 'StoreCreateView')
             self.store_user_update_view = get_class(
                 'partner.views', 'StoreUserUpdateView')
-            """self.stores_update_view = get_class(
+            self.stores_update_view = get_class(
                 'partner.views', 'StoreUpdateView')
+            """
             self.stores_delete_view = get_class(
                 'partner.views', 'StoreDeleteView')"""
 
@@ -28,9 +29,10 @@ class PartnerConfig(apps.PartnerConfig):
         urls = super().get_urls()
         urls += [
             path('search/', self.Stores_list_view.as_view(), name='index'),
-            path('details/<int:pk>/', self.Store_detail_view.as_view(), name='store-details'),
-            path('create/', self.stores_create_view.as_view(), name='store-create'),
+            path('store/details/<int:pk>/', self.Store_detail_view.as_view(), name='details'),
+            path('store/create/', self.stores_create_view.as_view(), name='store-create'),
             path('store/update-user/<int:user_pk>/', self.store_user_update_view.as_view(), name='user-update'),
+            path('store/update/<int:pk>/', self.stores_update_view.as_view(), name='update'),
         ]
         return self.post_process_urls(urls)
     

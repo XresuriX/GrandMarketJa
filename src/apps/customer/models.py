@@ -9,7 +9,7 @@ from oscar.apps.customer import abstract_models
 
 # An extension of the core Oscar User model
 class CustomUser(abstract_models.AbstractUser):
-   
+    username = models.CharField(unique=True, max_length=20, blank=True, null=True)
     def __str__(self):
         return self.email
 

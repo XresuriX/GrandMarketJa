@@ -30,7 +30,7 @@
     </div>
         {% for store in object_list %}
         <p>
-          <h2><img src="{{ stores_list.image }}"><a href="{% url 'partner:store-details' store.pk %}">{{ store.name }}</a></h2>
+          <h2><img src="{{ stores_list.image }}"><a href="{% url 'partner:details' store.pk %}">{{ store.name }}</a></h2>
           <!---The stall is in: {{ stall.city }}-->
         </p> <hr/>
         {% endfor %}

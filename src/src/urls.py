@@ -25,4 +25,5 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('', include(apps.get_app_config('oscar').urls[0])),
     path('partner/', apps.get_app_config('partner').urls),
+    path('accounts/', include('allauth.urls')),
 ]

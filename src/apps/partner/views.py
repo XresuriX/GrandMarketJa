@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
-
+from django.template.loader import render_to_string
 from apps.partner.models import Partner
 from apps.partner.forms import NewPartner, ExistingUserForm
 
@@ -95,3 +95,33 @@ class StoreUserUpdateView(UpdateView):
         messages.success(self.request,
                          _("User '%s' was updated successfully.") % name)
         return reverse('partner:index')
+    
+
+class StoreUpdateView( UpdateView, LoginRequiredMixin):
+    model = Partner
+    template_name = 'oscar/store/store_update.html'
+    form_class = NewPartner
+    context_object_name = 'store'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['title'] = self.object.name
+        return ctx
+    
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Store '%s' was created successfully.") %
+                         self.object.name)
+        return reverse('partner:update')
+
+    def forms_invalid(self, form, inlines):
+        messages.error(
+            self.request,
+            "Your submitted data was not valid - please correct the below errors")
+        return super().forms_invalid(form, inlines)
+
+    def forms_valid(self, form, inlines):
+        msg = render_to_string('Store/messages/store_saved.html',
+                               {'Stores': self.object})
+        messages.success(self.request, msg, extrforms_valida_tags='safe')
+        return super().forms_valid(form, inlines)
