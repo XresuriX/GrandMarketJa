@@ -1,4 +1,5 @@
 import pytest
+from django.urls import reverse
 from pytest_factoryboy import register
 from Tests.factories import PartnersFactory, UserFactory, ProductFactory, CategoryFactory, OptionFactory
 
@@ -15,6 +16,34 @@ register(PartnersFactory)
 #register(AttributeOptionGroupFactory)
 register(CategoryFactory)
 register(OptionFactory)
+
+"""@pytest.fixture
+def social_login_url():
+    return '/auth_accounts/login/'
+
+@pytest.fixture
+def social_login_url():
+    return reverse('socialaccount_login', args=['google'])"""
+
+@pytest.fixture
+def social_login_url_google():
+    provider = 'google'  # Change this to the social login provider you want to test
+    return f'/auth_accounts/{provider}/login/'
+
+@pytest.fixture
+def social_login_url_facebook():
+    provider = 'facebook'  # Change this to the social login provider you want to test
+    return f'/auth_accounts/{provider}/login/'
+
+@pytest.fixture
+def social_login_url_apple():
+    provider = 'apple'  # Change this to the social login provider you want to test
+    return f'/auth_accounts/{provider}/login/'
+
+@pytest.fixture
+def social_login_url_instagram():
+    provider = 'instagram'  # Change this to the social login provider you want to test
+    return f'/auth_accounts/{provider}/login/'
 
 
 @pytest.mark.django_db
