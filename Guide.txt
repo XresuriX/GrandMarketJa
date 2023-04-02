@@ -20,6 +20,21 @@ Example = get_model('Appname', 'Name of the model')
 for pytest
 export DJANGO_SETTINGS_MODULE=src.settings
 
+to be added in later
+"""'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+
+        'NAME': env('api_db'),
+
+        'USER': env('api_user'),
+
+        'PASSWORD': env('api_pwd'),
+
+        'HOST': env('host'),
+
+        'PORT': env('port'),
+
+    }"""
 
 what is wrong with the reverse for this view 
 

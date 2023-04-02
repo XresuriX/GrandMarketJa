@@ -26,4 +26,7 @@ urlpatterns = [
     path('', include(apps.get_app_config('oscar').urls[0])),
     path('partner/', apps.get_app_config('partner').urls),
     path('auth_accounts/', include('allauth.urls')),
+    path('instagram/', include('instagram_profile.urls')),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

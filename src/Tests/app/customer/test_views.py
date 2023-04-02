@@ -9,10 +9,11 @@ from django.test import Client
 
 @pytest.mark.django_db
 def test_redirect_to_home_when_logged_in(user_factory, client):
-    """Verify we redirect to the memes page when a user is logged in"""
+    """Verify we redirect to the home page when a user is logged in"""
     url = urls.reverse('home')
     resp = client.get(url)
     assert resp.status_code == 302
+    print(resp.url)
     assert resp.url == urls.reverse('customer:home')
 
 @pytest.mark.django_db

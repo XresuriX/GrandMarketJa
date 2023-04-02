@@ -14,6 +14,11 @@ from django.utils.translation import gettext_lazy as _
 from oscar.defaults import *
 from pathlib import Path
 import mimetypes
+import environ
+from django.dispatch import Signal
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-__$nu^_prl0zw20lkz5e%f6twzg9pl42xo(t1l!=g8_9m+z@&7'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('Debug')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -93,6 +98,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.instagram',
+
+    'instagram_profile',
 ]
 
 SITE_ID = 1
@@ -122,6 +129,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -299,4 +307,13 @@ SOCIALACCOUNT_PROVIDERS = {
         'VERSION': 'v13.0',
         'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
     }
+}
+
+
+#django instagram
+INSTAGRAM_PROFILE = {
+    # You will get these from your registered instagram appenv('app_id')env('secret')env('ur')
+    'app_id': '191447226968148',
+    'secret': 'c4aee2bda44e0e3389e8dbb353a625f8',
+    'redirect_url': 'localhost:8000/instagram_profile/profile/',        
 }
